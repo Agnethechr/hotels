@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Grand Hotel",
+    "address": "123 Main Street, Copenhagen, Denmark",
+    "rooms": 150
+  },
+  {
+    "name": "Seaside Resort",
+    "address": "45 Ocean Drive, Aarhus, Denmark",
+    "rooms": 80
+  },
+  {
+    "name": "Mountain Lodge",
+    "address": "78 Alpine Road, Odense, Denmark",
+    "rooms": 50
+  },
+  {
+    "name": "Cityscape Inn",
+    "address": "99 Skyline Ave, Aalborg, Denmark",
+    "rooms": 120
+  },
+  {
+    "name": "Harbor View Hotel",
+    "address": "12 Portside Lane, Esbjerg, Denmark",
+    "rooms": 95
+  }
+]
