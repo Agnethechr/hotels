@@ -1,11 +1,13 @@
 package app.entities;
 
 import app.dtos.HotelDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @AllArgsConstructor
@@ -20,13 +22,20 @@ public class Hotel {
     private int id;
     private String name;
     private String address;
-    private int rooms;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private Set<Room> rooms = new HashSet<>();
 
     public Hotel(HotelDTO hotelDTO){
         this.name = hotelDTO.getName();
         this.address = hotelDTO.getAddress();
-        this.rooms = hotelDTO.getRooms();
+        this.rooms = hotelDTO.getRooms().stream()
+                .map(room -> new Room(room, this))
+                .collect(Collectors.toSet());
     }
-}
 
-//HotelDTO: id, name, address, rooms
+    public void addRoom(Room room){rooms.add(room);}
+}

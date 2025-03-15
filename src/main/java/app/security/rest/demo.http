@@ -1,0 +1,24 @@
+GET localhost:7070/api/auth
+
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: "application/json"
+
+{
+"username":"user1",
+"password":"p1234"
+}
+
+###
+POST http://localhost:7070/api/auth/login
+Content-Type: "application/json"
+
+{
+"username":"user1",
+"password":"p1234"
+}
+
+###
+GET http://localhost:7070/api/secured/demo
+Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcIkFnbmV0aGVcIiIsInN1YiI6InVzZXIxIiwiZXhwIjoxNzQxODY2MzEyLCJyb2xlcyI6InVzZXIiLCJ1c2VybmFtZSI6InVzZXIxIn0.3P5xfPJ3euXRa9-H19cYLy3nvzgUR0v5JGnBI1aioaw"

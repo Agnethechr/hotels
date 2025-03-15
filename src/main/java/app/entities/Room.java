@@ -1,5 +1,6 @@
 package app.entities;
 
+import app.dtos.RoomDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,17 +11,27 @@ import lombok.*;
 @Data
 @Builder
 @Getter
+@Table(name = "rooms")
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
+    @Column(name="room_number")
+    private Integer number;
+    private Integer price;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "hotel_id", nullable = false)
     private Hotel hotel;
 
-    private int number;
-    private double price;
+    public Room(RoomDTO roomDTO,Hotel hotel){
+        this.number = roomDTO.getNumber();
+        this.price = roomDTO.getPrice();
+        this.hotel = hotel;
+    }
+
+    public Room(RoomDTO roomDTO) {
+    }
 }
 
 

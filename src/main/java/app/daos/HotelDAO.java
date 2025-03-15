@@ -8,11 +8,11 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 
-public class HotelDAO {
+import java.util.List;
 
+public class HotelDAO {
     private static EntityManagerFactory emf;
     private static HotelDAO instance;
-
 
     private HotelDAO() {
     }
@@ -25,27 +25,32 @@ public class HotelDAO {
         return instance;
     }
 
-    public HotelDTO save(HotelDTO hotelDTO){
+    public HotelDTO create(HotelDTO hotelDTO){
+        try(EntityManager em = emf.createEntityManager()){
+            em.getTransaction().begin();
+            Hotel hotel = new Hotel(hotelDTO);
+            em.persist(hotel);
+            em.getTransaction().commit();
+            return new HotelDTO(hotel);
+        }
+    }
+
+    public List<Hotel> readAll() {
         EntityManager em = emf.createEntityManager();
-        EntityTransaction transaction = em.getTransaction();
-
-        try{
-            transaction.begin();
-            Hotel hotel = new Hotel();
-            hotel.setId(hotelDTO.getId());
-            hotel.setName(hotelDTO.getName());
-            hotel.setAddress(hotelDTO.getAddress());
-            hotel.setRooms(hotelDTO.getRooms());
-
-            em.merge(hotel);
-            transaction.commit();
-        }catch (Exception e){
-            e.printStackTrace();
-            transaction.rollback();
-        }finally {
+        try {
+            return em.createQuery("SELECT h FROM Hotel h", Hotel.class).getResultList();
+        } finally {
             em.close();
         }
-        return hotelDTO;
+    }
+
+    public Hotel read(int id) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.find(Hotel.class, id);
+        } finally {
+            em.close();
+        }
     }
 
     public HotelDTO getById(int id){
@@ -58,7 +63,6 @@ public class HotelDAO {
             hotelDTO.setId(hotel.getId());
             hotelDTO.setName(hotel.getName());
             hotelDTO.setAddress(hotel.getAddress());
-            hotelDTO.setRooms(hotel.getRooms());
 
             return hotelDTO;
         } catch (Exception e){
@@ -67,53 +71,33 @@ public class HotelDAO {
         }
     }
 
-    public HotelDTO updateById(int id, HotelDTO hotelDTO){
-        try(EntityManager em = emf.createEntityManager()){
+    public Hotel updateById(int id, Hotel updatedHotel) {
+        EntityManager em = emf.createEntityManager();
+        try {
             em.getTransaction().begin();
-
             Hotel hotel = em.find(Hotel.class, id);
-
-            if(hotel == null){
-                return null;
+            if (hotel != null) {
+                hotel.setName(updatedHotel.getName());
+                hotel.setAddress(updatedHotel.getAddress());
+                hotel.setRooms(updatedHotel.getRooms());
+                em.merge(hotel);
+                em.getTransaction().commit();
             }
-
-            hotel.setName(hotelDTO.getName());
-            hotel.setAddress(hotelDTO.getAddress());
-            hotel.setRooms(hotelDTO.getRooms());
-
-            em.merge(hotel);
-
-            em.getTransaction().commit();
-
-            return new HotelDTO(hotel);
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
+            return hotel;
+        } finally {
+            em.close();
         }
     }
 
-    public boolean deleteById(int id) {
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction transaction = em.getTransaction();
-
-        try {
-            transaction.begin();
+    public void deleteById(Integer id) {
+        try(EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
             Hotel hotel = em.find(Hotel.class, id);
 
             if (hotel != null) {
                 em.remove(hotel);
-                transaction.commit();
-                return true;
-            } else {
-                transaction.rollback();
-                return false;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            transaction.rollback();
-            return false;
-        } finally {
-            em.close();
+            em.getTransaction().commit();
         }
     }
 

@@ -1,0 +1,105 @@
+GET localhost:7070/api/hotel
+
+###
+
+POST localhost:7070/api/hotel
+Content-Type:"application/json"
+
+{
+    "name": "Grand Budapest Hotel",
+    "address": "185 Main Street, Copenhagen, Denmark",
+    "rooms": [
+      {
+        "number": "107",
+        "price": 150.0
+      },
+      {
+        "number": "108",
+        "price": 180.0
+      },
+      {
+        "number": "109",
+        "price": 200.0
+      },
+      {
+        "number": "201",
+        "price": 220.0
+      },
+      {
+        "number": "202",
+        "price": 250.0
+      },
+      {
+        "number": "203",
+        "price": 275.0
+      },
+      {
+        "number": "204",
+        "price": 290.0
+      },
+      {
+        "number": "205",
+        "price": 310.0
+      },
+      {
+        "number": "206",
+        "price": 330.0
+      },
+      {
+        "number": "207",
+        "price": 350.0
+      }
+    ]
+  }
+
+
+###
+PUT localhost:7070/api/hotel/2
+Content-Type:"application/json"
+
+{
+    "name": "Seaside Drive Resort",
+    "address": "45 Ocean Drive, Copenhagen, Denmark",
+    "rooms": [
+      {
+        "number": "201",
+        "price": 160.0
+      },
+      {
+        "number": "202",
+        "price": 185.0
+      },
+      {
+        "number": "203",
+        "price": 210.0
+      },
+      {
+        "number": "204",
+        "price": 230.0
+      },
+      {
+        "number": "205",
+        "price": 255.0
+      },
+      {
+        "number": "206",
+        "price": 280.0
+      },
+      {
+        "number": "207",
+        "price": 295.0
+      },
+      {
+        "number": "208",
+        "price": 315.0
+      },
+      {
+        "number": "209",
+        "price": 335.0
+      },
+      {
+        "number": "210",
+        "price": 355.0
+      }
+    ]
+  }

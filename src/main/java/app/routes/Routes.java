@@ -9,18 +9,16 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Routes {
 
-    private final HotelRoute hotelRoute = new HotelRoute();
-    private final RoomRoute roomRoute = new RoomRoute();
     private static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-   // private static HotelController hotelController = new HotelController(emf);
+    private static HotelController hotelController = new HotelController();
 
-    public EndpointGroup getRoutes() {
+    public static EndpointGroup getRoutes() {
         return () -> {
-//            path("/hotels", hotelRoute.getRoutes());
-//            path("/rooms", roomRoute.getRoutes());
-            path("/hotel",() ->{
-               // get("/", hotelController::getAllHotels);
-            });
+            post("/", hotelController::create);
+            get("/", hotelController::readAll);
+            get("/{id}", hotelController::read);
+            put("/{id}", hotelController::update);
+            delete("/{id}", hotelController::delete);
         };
     }
 }

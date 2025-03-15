@@ -14,7 +14,7 @@ public class RoomDTO {
     private int id;
     private int hotelId;
     private int number;
-    private double price;
+    private int price;
 
     public RoomDTO(Room room) {
         this.id = room.getId();
