@@ -21,4 +21,4 @@ Content-Type: "application/json"
 
 ###
 GET http://localhost:7070/api/secured/demo
-Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcIk1hbG91IFZpY2hcIiIsInN1YiI6InVzZXIxIiwiZXhwIjoxNzQyMTkzMDY5LCJyb2xlcyI6InVzZXIiLCJ1c2VybmFtZSI6InVzZXIxIn0.6tKQqkC2iMN2vs78dXQblBy6L5Herqex_sj-Ez_REqQ"
+Authorization: "Bearer "
