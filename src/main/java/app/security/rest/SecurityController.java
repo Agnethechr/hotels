@@ -4,17 +4,21 @@ import app.exceptions.ApiException;
 import app.exceptions.ValidationException;
 import app.security.daos.UserDAO;
 import app.security.entities.User;
+import app.security.exceptions.NotAuthorizedException;
 import app.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.bugelhartmann.ITokenSecurity;
 import dk.bugelhartmann.TokenSecurity;
+import dk.bugelhartmann.TokenVerificationException;
 import dk.bugelhartmann.UserDTO;
 import io.javalin.http.ForbiddenResponse;
 import io.javalin.http.Handler;
+import io.javalin.http.HttpStatus;
 import io.javalin.http.UnauthorizedResponse;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.text.ParseException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -112,7 +116,7 @@ public class SecurityController implements ISecurityController {
             return true;
 
         // 1. Get permitted roles and Check if the endpoint is open to all with the ANYONE role
-        if (allowedRoles.contains("ANYONE")) {
+        if (allowedRoles.contains("USER")) {
             return true;
         }
         return false;
@@ -140,10 +144,20 @@ public class SecurityController implements ISecurityController {
         }
     }
 
-    public UserDTO verifyToken(String token) throws Exception {
-        //return null;
+    private UserDTO verifyToken(String token) {
+        boolean IS_DEPLOYED = (System.getenv("DEPLOYED") != null);
+        String SECRET = IS_DEPLOYED ? System.getenv("SECRET_KEY") : Utils.getPropertyValue("SECRET_KEY", "config.properties");
 
-        throw new UnsupportedOperationException("Not implemented yet");
+        try {
+            if (tokenSecurity.tokenIsValid(token, SECRET) && tokenSecurity.tokenNotExpired(token)) {
+                return tokenSecurity.getUserWithRolesFromToken(token);
+            } else {
+                throw new NotAuthorizedException(403, "Token is not valid");
+            }
+        } catch (ParseException | NotAuthorizedException | TokenVerificationException e) {
+            e.printStackTrace();
+            throw new ApiException(HttpStatus.UNAUTHORIZED.getCode(), "Unauthorized. Could not verify token");
+        }
     }
 
     @Override

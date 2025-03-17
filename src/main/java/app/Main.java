@@ -3,7 +3,7 @@ package app;
 import app.config.HibernateConfig;
 import app.controllers.HotelController;
 import app.routes.ApplicationConfig;
-import app.routes.Routes;
+import app.security.rest.Routes;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.io.IOException;
@@ -21,8 +21,9 @@ public class Main {
 
         ApplicationConfig.getInstance()
                 .initiateServer()
-                .setRoute(Routes.getRoutes())
+                .checkSecurityRoles()
                 .handleExceptions()
+                .setRoute(Routes.getRoutes())
                 .startServer(7070);
     }
 }
